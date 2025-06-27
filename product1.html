@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Beast Tee - Order</title>
+  <title>Order Beast Tee - Zyphorix</title>
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -16,7 +16,7 @@
     <h2>₹799</h2>
     <p>High-performance gym t-shirt with the iconic Z logo.</p>
 
-    <form action="https://formspree.io/f/meokvaez" method="POST">
+    <form id="orderForm">
       <input type="text" name="name" placeholder="Full Name" required>
       <input type="tel" name="phone" placeholder="Phone Number" required>
       <input type="text" name="address" placeholder="Shipping Address" required>
@@ -33,12 +33,35 @@
         <option>White</option>
       </select>
 
-      <button type="submit">Place Order</button>
+      <button type="submit">Place Order & Pay ₹799</button>
     </form>
-
-    <a href="upi://pay?pa=vipinthingalaya7@okaxis&pn=Zyphorix&am=799&cu=INR" target="_blank">
-      <button class="pay-btn">Pay Now ₹799</button>
-    </a>
   </main>
+
+  <script>
+    document.getElementById("orderForm").addEventListener("submit", function(event) {
+      event.preventDefault(); // stop form from submitting normally
+
+      // Create a FormData object
+      const formData = new FormData(this);
+
+      // Send the form to Formspree
+      fetch("https://formspree.io/f/meokvaez", {
+        method: "POST",
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).then(response => {
+        if (response.ok) {
+          // Open UPI payment after form is submitted
+          window.open("upi://pay?pa=vipinthingalaya7@okaxis&pn=Zyphorix&am=799&cu=INR", "_blank");
+          // Redirect to thank you page
+          window.location.href = "thankyou.html";
+        } else {
+          alert("There was a problem placing your order. Please try again.");
+        }
+      }).catch(error => {
+        alert("Error: " + error.message);
+      });
+    });
+  </script>
 </body>
 </html>
